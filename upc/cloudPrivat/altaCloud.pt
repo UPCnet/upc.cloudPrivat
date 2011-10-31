@@ -1,0 +1,125 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="upc.cloudPrivat"
+      tal:omit-tag="">
+<head>
+<style type="text/css">
+#marco {
+    border-color: #2298C5;
+    border-style: none solid solid;
+    border-width: medium 3px 3px;
+    color: #333333;
+    font-family: Arial;
+    font-size: 12px;
+    margin-left: 38px;
+    margin-right: 33px;
+    margin-top: -2px;
+    padding: 20px 50px 8px;
+    vertical-align: middle;
+}
+[id="form-buttons-Cancel"], button {
+background: url("++resource++upc.cloudPrivat.images/boto_noaccepto.png") no-repeat scroll center center transparent;
+    border: medium none;
+    color: transparent;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    font-size: 0;
+    font-weight: bold;
+    height: 31px;
+    line-height: 999px;
+    margin-right: 20px;
+    overflow: hidden;
+    width: 158px;
+    margin-left: 175px;
+    margin-top: -82px;
+    padding-top: 80px;
+}
+[id="form-buttons-Registra usuari"], button {
+    background: url("++resource++upc.cloudPrivat.images/boto_accepto.png") no-repeat scroll center center transparent;
+    border: medium none;
+    color: transparent;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    font-size: 0;
+    font-weight: bold;
+    height: 31px;
+    line-height: 999px;
+    margin-right: 20px;
+    overflow: hidden;
+    width: 158px;
+    padding-top: 80px;
+}
+#titol {
+	margin-left: 38px;
+}
+}
+</style>
+</head>
+
+<!-- Mostra el missatge d'error -->
+<div class="portalMessage"
+      tal:condition="view/status" tal:content="view/status">
+</div>
+
+<body id="pas2">  
+<div class="caixacontingut2"  style="margin-top: 20px;">
+<img id="titol" src="++resource++upc.cloudPrivat.images/superior_pas_two.png">  
+
+
+</div>
+<div id="marco">
+
+<br/>
+
+ 
+
+<form>
+<tal:widgets repeat="widget view/widgets/values">
+	                <div class="row"
+	                     tal:define="hidden python:widget.mode == 'hidden'"
+	                     tal:omit-tag="hidden">
+                  
+                      <div class="field"
+                           tal:define="error widget/error;
+                                       hidden python:widget.mode == 'hidden';"
+                           tal:attributes="class python:'field' + (error and ' error' or '')">
+                        <label for=""
+                               tal:attributes="for widget/id"
+                               tal:condition="not:hidden">
+                          <span i18n:translate=""
+                                tal:content="widget/label">label</span>
+                        </label>
+
+                        <span class="fieldRequired" title="Requerit"
+                              tal:condition="python:widget.required and not hidden"
+                              i18n:translate="label_required"
+                              i18n:attributes="title title_required;">
+                          (Requerit)
+                        </span>
+
+                        <div class="formHelp"
+                             tal:define="description widget/field/description"
+                             i18n:translate=""
+                             tal:content="description"
+                             tal:condition="python:description and not hidden"
+                             >field description</div>
+
+                        <div tal:condition="error"
+                             tal:content="structure error/render">
+                          Error
+                        </div>
+
+                        <div class="widget">
+                          <input type="text" tal:replace="structure widget/render" />
+                        </div>
+                      </div>          
+
+                </div>
+              </tal:widgets>
+
+<metal:use use-macro="context/@@ploneform-macros/actions" />
+</form>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"    
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="upc.cloudPrivat">
+
+  <five:registerPackage package="." initialize=".initialize" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="upc.cloudPrivat"
+      directory="profiles/default"
+      description="Installs the upc.cloudPrivat package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  <!-- -*- extra stuff goes here -*- --> 
+  
+  <!-- Include z3c.form as dependency -->
+  <include package="plone.app.z3cform" />
+  <include package="plone.z3cform" />
+  
+  <!-- Registra el formulari d'alta usuari al servei UPC Cloud Privat -->
+  <browser:page
+        for="*"
+        name="altaCloud_form"
+        class=".altaCloud.AltaCloudView"
+        permission="zope2.View"
+        />
+  
+  <!-- Registra la pàgina de resposta de l'alta al servei UPC Cloud Privat -->     
+  <browser:page
+         for="*"
+         name="respostaAltaCloud"
+         class=".viewlets.respostaAltaCloud"
+         permission="zope2.View"
+         />    
+  
+  <!-- Registra la pàgina de registre d'alta usuaris al servei UPC Cloud Privat -->     
+  <browser:page
+         for="*"
+         name="peticionsAltaCloud"
+         class=".viewlets.peticionsAltaCloud"
+         permission="zope2.View"
+         />          
+
+  <browser:resourceDirectory
+        name="upc.cloudPrivat.images"
+        directory="images"
+        />       
+</configure>

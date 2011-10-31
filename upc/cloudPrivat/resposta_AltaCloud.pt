@@ -1,0 +1,23 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master">
+    <body>   
+		<div metal:fill-slot="main">
+ 			<metal:main-macro define-macro="main">		
+ 			
+ 			<h1 class="documentFirstHeading">             
+           		<span id="parent-fieldname-title" class="">
+              			Resposta del registre al servei Cloud Privat UPC
+           		</span>    
+            </h1>
+ 			 			
+			<div style="border-color: rgb(34, 152, 197); border-style: solid solid solid; border-width: medium 3px 3px; color: rgb(51, 51, 51); font-family: Arial; font-size: 12px; margin-left: 38px; margin-right: 33px; margin-top: 20px; padding: 20px 50px 8px; vertical-align: middle;">
+
+	   			 <div tal:define="resultat view/result_peticio" tal:replace="structure python:resultat"></div>		
+
+			</div>
+ 			</metal:main-macro>
+		</div>
+    </body>
+</html>
