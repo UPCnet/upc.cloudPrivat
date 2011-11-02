@@ -38,9 +38,9 @@ class peticionsAltaCloud(BrowserView):
         
     def __call__(self):
         """
-        """    
-        carpetaResultats = self.context.portal_url.getPortalObject()['serveis']['servei-cloud']['registre']
-        annotations = IAnnotations(carpetaResultats)        
+        """            
+        carpetaResultats = self.context.portal_url.getPortalObject()['serveis']['servidors-i-xarxes']['servidors']['cloud-privat-upc']['registre']
+        annotations = IAnnotations(carpetaResultats)                
         #pruebas pilar
 #        content_renderers = annotations.get('upc.cloudPrivat-registres',[]) 
 #        return '\n'.join(['%s,%s,%s,%s' % (reg.values()[2],reg.values()[1],reg.values()[3],reg.values()[0]) for reg in content_renderers])

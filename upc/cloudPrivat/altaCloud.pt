@@ -96,23 +96,24 @@ background: url("++resource++upc.cloudPrivat.images/boto_noaccepto.png") no-repe
                               i18n:attributes="title title_required;">
                           (Requerit)
                         </span>
-
-                        <div class="formHelp"
-                             tal:define="description widget/field/description"
-                             i18n:translate=""
-                             tal:content="description"
-                             tal:condition="python:description and not hidden"
-                             >field description</div>
+                        
 
                         <div tal:condition="error"
                              tal:content="structure error/render">
                           Error
                         </div>
 
-                        <div class="widget">
+                        <div class="widget" style="font-weight: bold">
                           <input type="text" tal:replace="structure widget/render" />
                         </div>
-                      </div>          
+                      </div>       
+                      
+                        <div class="formHelp" style="padding-top: 5px; font-size: 80%; line-height: 1.5em;"
+                             tal:define="description widget/field/description"
+                             i18n:translate=""
+                             tal:content="description"
+                             tal:condition="python:description and not hidden"
+                             >field description</div>   
 
                 </div>
               </tal:widgets>

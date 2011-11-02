@@ -156,7 +156,7 @@ class AltaCloud(OverridableTemplate, form.Form):
             #El primer valor del missatge de resposta "result_peticion" és 1 si l'usuari s'ha creat amb èxit
             #i 0 en qualsevol altre cas
             respuesta_creacion = result_peticion[0]
-            mensaje_devuelto = result_peticion[1:]           
+            mensaje_devuelto = result_peticion[1:]   
             #Si l'usuari s'ha creat amb èxit, guardo les dades de registre en una annotation  
             if respuesta_creacion == '1':
                 annotations = IAnnotations(self.context)
@@ -180,14 +180,14 @@ class AltaCloud(OverridableTemplate, form.Form):
                 registres[self.request.get('nom_usuari')]=dades_registre
                 annotations['upc.cloudPrivat-registres']=registres
             #redirecciona la resposta al viewlet respostaAltaCloud            
-            return self.request.response.redirect(self.context.portal_url()+'/serveis/servei-cloud/respostaAltaCloud?valor=%s' % mensaje_devuelto)
+            return self.request.response.redirect(self.context.portal_url()+'/serveis/servidors-i-xarxes/servidors/cloud-privat-upc/respostaAltaCloud?valor=%s' % mensaje_devuelto)
 
 
     
     @button.buttonAndHandler(_(u'Cancel'),
                          name='Cancel')
     def handle_proceed_cancel(self, action):
-     self.request.response.redirect(self.context.portal_url())    
+     self.request.response.redirect(self.context.portal_url()+'/serveis/servidors-i-xarxes/servidors/cloud-privat-upc/')    
        
     def connect_to_server(self, url):
         """Fa una petició via hhtps al servei cloud i retorna el valor retornat pel servei
