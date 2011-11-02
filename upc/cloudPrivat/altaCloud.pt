@@ -75,7 +75,7 @@ background: url("++resource++upc.cloudPrivat.images/boto_noaccepto.png") no-repe
 
 <form>
 <tal:widgets repeat="widget view/widgets/values">
-	                <div class="row"
+	                <div class="row" style="padding-bottom: 15px;"
 	                     tal:define="hidden python:widget.mode == 'hidden'"
 	                     tal:omit-tag="hidden">
                   

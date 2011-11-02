@@ -22,7 +22,9 @@ import datetime
 
 from zope.app.pagetemplate import viewpagetemplatefile
 from plone.z3cform import layout
-        
+import re
+       
+ 
 
 class OverridableTemplate(object):
     """Subclasses of this class must set the template they want to use
@@ -40,18 +42,22 @@ class OverridableTemplate(object):
 
 #Interface on creem els camps del formulari
 class IAltaCloud(interface.Interface):
-    nom_usuari = schema.TextLine(title=u"Nom usuari", readonly=True, required=True)
-    unitat = schema.TextLine(title=u"Unitat", description=u"Si aquest no és el domini posat en contacte amb ATIC", readonly=True, required=True)
-    codiUnitat = schema.TextLine(title=u"Codi Unitat", readonly=True, required=True)    
-    email = schema.TextLine(title=u"Email", readonly=True, required=True)   
-    password = schema.Password(title=u"Introdueix la contrasenya", description=u"La contrasenya com a mínim ha de tenir 8 dígits", required=True, min_length=8)
+    nom_usuari = schema.TextLine(title=u"Nom d'usuari", description=u"El nom d'usuari d'accés al Cloud Privat UPC serà el mateix que el nom d'usuari de la intranet UPC", readonly=True, required=True)
+    unitat = schema.TextLine(title=u"Unitat", description=u"La informació continguda en el camp Unitat, és la corresponent al nom de la unitat a la que pertany, segons consta a gAUSS, la persona que es vol donar d’alta al Cloud Privat UPC. Si la unitat a donar d’alta no és correcte, posi’s en contacte amb l’ATIC al 93 401 62 13.", readonly=True, required=True)
+    codiUnitat = schema.TextLine(title=u"Codi Unitat",  description=u"La informació continguda en el camp Codi Unitat, és la corresponent al codi de la unitat a la que pertany, segons consta a gAUSS, la persona que es vol donar d’alta al Cloud Privat UPC. Si la unitat a donar d’alta no és correcte, posi’s en contacte amb l’ATIC al 93 401 62 13.", readonly=True, required=True)    
+    email = schema.TextLine(title=u"Correu electrònic institucional",description=u"L’adreça de correu electrònic que s’inclou al formulari és l’adreça institucional que correspon a l’usuari/a. Si l’adreça de correu electrònic no és correcte, posi’s en contacte amb l’ATIC al 93 401 62 13.", readonly=True, required=True)   
+    password = schema.Password(title=u"Introdueix la contrasenya", description=u"La contrasenya ha de tenir com a mínim 8 caràcters i ha de contenir dígits (0-9), minúscules (a-z) i majúscules (A-Z).", required=True, min_length=8)
     confirmation = schema.Password(title=u"Repeteix la contrasenya", description=u"Torna a introduir la contrasenya per confirma-la", required=True, min_length=8)
 
    
-    #Valida si la contrasenya i la de confirmació son iguals.
+    #Valida si la contrasenya conté dígits (0-9), minúscules (a-z) i majúscules (A-Z) i també valida si la contrasenya i la de confirmació son iguals.
     @zope.interface.invariant     
     def check_passwords_match(schema):                            
-        """Password and confirmation must match"""          
+        """Password and confirmation must match"""  
+        #Expressió regular per validar la política de seguretat de la contrasenya 
+        tmp = re.compile(r"(?!^[0-9]*$)(?=.*[A-Z])(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$").match  
+        if not tmp(schema.password):            
+            raise zope.interface.Invalid("La contrasenya ha de tenir com a mínim 8 caràcters i ha de contenir dígits (0-9), minúscules (a-z) i majúscules (A-Z).")       
         if schema.password != schema.confirmation:                       
             raise zope.interface.Invalid("La seva contrasenya i la de confirmació no coincideixen. Si us plau introduexi-la un altre cop.")
         
@@ -117,11 +123,11 @@ class AltaCloud(OverridableTemplate, form.Form):
             elif error.message == ('Value is too short'):
                 error.message = (u'El valor és massa curt') 
                 
-            
-       
+        #Expressió regular per validar la política de seguretat de la contrasenya    
+        tmp = re.compile(r"(?!^[0-9]*$)(?=.*[A-Z])(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$").match  
         #Si hi han errors mostra el missatge d'error 
         #sino envia petició al servei cloud amb les dades necessaries 
-        #i redirecciona la resposta al viewlet respostaAltaCloud              
+        #i redirecciona la resposta al viewlet respostaAltaCloud     
         if errors:  
             if data == {}:
                 self.status = self.formErrorsMessage
@@ -131,7 +137,10 @@ class AltaCloud(OverridableTemplate, form.Form):
                 self.status = self.formErrorsMessage
             elif data['password'] != data['confirmation']:             
                 formErrorsMessage = _(u"La seva contrasenya i la de confirmació no coincideixen. Si us plau introduexi-la un altre cop.")  
-                self.status = formErrorsMessage    
+                self.status = formErrorsMessage 
+            elif not tmp(data['password']):            
+                formErrorsMessage =_(u"La contrasenya ha de tenir com a mínim 8 caràcters i ha de contenir dígits (0-9), minúscules (a-z) i majúscules (A-Z).")
+                self.status = formErrorsMessage           
             else:
                 self.status = self.formErrorsMessage
         else:   
