@@ -148,8 +148,8 @@ class AltaCloud(OverridableTemplate, form.Form):
             unitat = self.request.get('unitat')
             codiUnitat = self.request.get('codiUnitat')
             email = self.request.get('email')
-            password = data['password']
-            url_envio_peticion = 'https://plecs.upc.edu/clc/plugins/ws/create_user.php'
+            password = data['password']            
+            url_envio_peticion = 'https://cloud.upc.edu/gestio/plugins/ws/create_user.php'
             valores = '?nom_usuari=%s,unitat=%s,codi_unitat=%s,email=%s,contrasenya=%s' % (nom_usuari,unitat,codiUnitat,email,password)        
             url = url_envio_peticion+valores              
             result_peticion = self.connect_to_server(url) 
