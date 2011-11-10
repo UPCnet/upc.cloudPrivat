@@ -55,7 +55,7 @@ class IAltaCloud(interface.Interface):
     def check_passwords_match(schema):                            
         """Password and confirmation must match"""  
         #Expressió regular per validar la política de seguretat de la contrasenya 
-        tmp = re.compile(r"(?!^[0-9]*$)(?=.*[A-Z])(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$").match  
+        tmp = re.compile('^(?=.*\d)(?=.*[a-z])(?=.*([\!\#\$\%\&\+\-\.\?\@\_\€]|[A-Z])).{8,}$').match
         if not tmp(schema.password):            
             raise zope.interface.Invalid("La contrasenya ha de tenir com a mínim 8 caràcters i ha de contenir dígits (0-9), minúscules (a-z) i majúscules (A-Z).")       
         if schema.password != schema.confirmation:                       
@@ -124,7 +124,7 @@ class AltaCloud(OverridableTemplate, form.Form):
                 error.message = (u'El valor és massa curt') 
                 
         #Expressió regular per validar la política de seguretat de la contrasenya    
-        tmp = re.compile(r"(?!^[0-9]*$)(?=.*[A-Z])(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$").match  
+        tmp = re.compile('^(?=.*\d)(?=.*[a-z])(?=.*([\!\#\$\%\&\+\-\.\?\@\_\€]|[A-Z])).{8,}$').match
         #Si hi han errors mostra el missatge d'error 
         #sino envia petició al servei cloud amb les dades necessaries 
         #i redirecciona la resposta al viewlet respostaAltaCloud     
