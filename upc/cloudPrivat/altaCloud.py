@@ -197,8 +197,11 @@ class AltaCloud(OverridableTemplate, form.Form):
         data_stream = None
         
         try:
+            import socket
+            socket.setdefaulttimeout(10)            
             data_stream = urllib2.urlopen(url)
             xml = data_stream.read()
+            socket.setdefaulttimeout(2)
             data_stream.close()           
         except urllib2.URLError, e:
             raise IOError, e
