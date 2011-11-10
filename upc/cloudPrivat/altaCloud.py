@@ -81,8 +81,8 @@ class AltaCloud(OverridableTemplate, form.Form):
         ldapUPC = portal.acl_users.ldapUPC.acl_users
         pm = getToolByName(self.context, 'portal_membership')   
         user_id = pm.getAuthenticatedMember().id           
-
-        search_result = ldapUPC.searchUsers(cn=user_id,exactMatch=True)
+          
+        search_result = [res for res in ldapUPC.searchUsers(cn=user_id,exactMatch=True) if res['cn']==user_id]
         self.widgets['nom_usuari'].value = user_id
         self.widgets['unitat'].value = search_result[0]['unit']
         self.widgets['codiUnitat'].value = search_result[0]['unitCode']        
@@ -97,8 +97,8 @@ class AltaCloud(OverridableTemplate, form.Form):
         ldapUPC = portal.acl_users.ldapUPC.acl_users
         pm = getToolByName(self.context, 'portal_membership')   
         user_id = pm.getAuthenticatedMember().id           
-
-        search_result = ldapUPC.searchUsers(cn=user_id,exactMatch=True)      
+        
+        search_result = [res for res in ldapUPC.searchUsers(cn=user_id,exactMatch=True) if res['cn']==user_id]    
         self.request.set('nom_usuari', user_id)      
         self.request.set('unitat', search_result[0]['unit'])      
         self.request.set('codiUnitat', search_result[0]['unitCode'])    
