@@ -16,6 +16,14 @@
 
 	   			 <div tal:define="resultat view/result_peticio" tal:replace="structure python:resultat"></div>		
 
+				 <div><br><br><br><p>Si vols consultar o modificar les vostres dades, pots fer-ho a través del portal de gestió o bé directament des de l'URL: <a href="http://cloud.upc.edu/gestio">http://cloud.upc.edu/gestio</a></p><br>
+
+					  <p>Recorda que pots contactar amb l'ATIC a través dels canals habituals per fer qualsevol consulta, petició o comunicar qualsevol incidència que puguis tenir amb la utilització d'aquest servei.</p><br>
+
+					  <p>Salutacions,</p><br>
+
+					  <p>El servei Cloud Privat UPC</p> 
+			     </div>
 			</div>
  			</metal:main-macro>
 		</div>
