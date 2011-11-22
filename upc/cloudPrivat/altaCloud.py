@@ -17,20 +17,19 @@ from upc.cloudPrivat import altaCloudMessageFactory as _
 
 import urllib2
 
-from zope.app.annotation.interfaces import IAttributeAnnotatable, IAnnotations
+from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 import datetime
 
 from zope.app.pagetemplate import viewpagetemplatefile
 from plone.z3cform import layout
 import re
-       
- 
+
 
 class OverridableTemplate(object):
     """Subclasses of this class must set the template they want to use
     as the default template as the ``index`` attribute, not the
     ``template`` attribute that's normally used for forms.
-    
+
     Users of this package may override the template used by one of the
     forms by using the ``browser`` directive and specifying their own
     template.
@@ -38,7 +37,7 @@ class OverridableTemplate(object):
     @property
     def template(self):
         return self.index
-    
+
 
 #Interface on creem els camps del formulari
 class IAltaCloud(interface.Interface):
@@ -98,7 +97,7 @@ class AltaCloud(OverridableTemplate, form.Form):
         pm = getToolByName(self.context, 'portal_membership')   
         user_id = pm.getAuthenticatedMember().id           
         
-        search_result = [res for res in ldapUPC.searchUsers(cn=user_id,exactMatch=True) if res['cn']==user_id]    
+        search_result = [res for res in ldapUPC.searchUsers(cn=user_id,exactMatch=True) if res['cn']==user_id]
         self.request.set('nom_usuari', user_id)      
         self.request.set('unitat', search_result[0]['unit'])      
         self.request.set('codiUnitat', search_result[0]['unitCode'])    
@@ -197,11 +196,8 @@ class AltaCloud(OverridableTemplate, form.Form):
         data_stream = None
         
         try:
-            import socket
-            socket.setdefaulttimeout(10)            
-            data_stream = urllib2.urlopen(url)
+            data_stream = urllib2.urlopen(url, timeout=20)
             xml = data_stream.read()
-            socket.setdefaulttimeout(2)
             data_stream.close()           
         except urllib2.URLError, e:
             raise IOError, e
