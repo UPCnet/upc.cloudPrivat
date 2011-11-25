@@ -1,12 +1,14 @@
 Changelog
 =========
 
+1.2 (2011-11-25)
+----------------
+- GenwebUPC 4 ready.
+
 1.1 (2011-11-10)
 ----------------
-
 - Canvi correctiu per aplicar correctament la política de contrasenyes
 
 1.0 (2011-11-3)
 -------------------
-
 - Initial release
