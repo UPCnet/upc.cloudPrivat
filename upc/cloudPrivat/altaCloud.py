@@ -23,6 +23,8 @@ import datetime
 from zope.app.pagetemplate import viewpagetemplatefile
 from plone.z3cform import layout
 import re
+import hashlib
+
 
 
 class OverridableTemplate(object):
@@ -126,7 +128,7 @@ class AltaCloud(OverridableTemplate, form.Form):
         tmp = re.compile('^(?=.*\d)(?=.*[a-z])(?=.*([\!\#\$\%\&\+\-\.\?\@\_\€]|[A-Z])).{8,}$').match
         #Si hi han errors mostra el missatge d'error 
         #sino envia petició al servei cloud amb les dades necessaries 
-        #i redirecciona la resposta al viewlet respostaAltaCloud     
+        #i redirecciona la resposta al viewlet respostaAltaCloud     !H&la12?
         if errors:  
             if data == {}:
                 self.status = self.formErrorsMessage
@@ -143,17 +145,24 @@ class AltaCloud(OverridableTemplate, form.Form):
             else:
                 self.status = self.formErrorsMessage
         else:   
-            nom_usuari = self.request.get('nom_usuari')
-            unitat = self.request.get('unitat')
-            codiUnitat = self.request.get('codiUnitat')
+            nom_usuari = self.request.get('nom_usuari')            
+            unitat = self.request.get('unitat')            
+            codiUnitat = self.request.get('codiUnitat')          
             email = self.request.get('email')
-            password = data['password']            
+            password = data['password']  
+                         
+            #Crear el password amb MD5 tal com ens han demanat perque no doni error el caracter &
+            passwordmd5 = hashlib.md5(password).hexdigest() 
+            
+            #url entorn test
+            #url_envio_peticion = 'http://plecs.upc.edu/gestio/plugins/ws/create_user.php'    
+                   
             url_envio_peticion = 'https://cloud.upc.edu/gestio/plugins/ws/create_user.php'
-            valores = '?nom_usuari=%s,unitat=%s,codi_unitat=%s,email=%s,contrasenya=%s' % (nom_usuari,unitat,codiUnitat,email,password)        
+            valores = '?nom_usuari=%s,unitat=%s,codi_unitat=%s,email=%s,contrasenya=%s' % (nom_usuari,unitat,codiUnitat,email,passwordmd5) 
             url = url_envio_peticion+valores              
             result_peticion = self.connect_to_server(url) 
             #El primer valor del missatge de resposta "result_peticion" és 1 si l'usuari s'ha creat amb èxit
-            #i 0 en qualsevol altre cas
+            #o timeout i 0 en qualsevol altre cas
             respuesta_creacion = result_peticion[0]
             mensaje_devuelto = result_peticion[1:]   
             #Si l'usuari s'ha creat amb èxit, guardo les dades de registre en una annotation  
@@ -195,12 +204,15 @@ class AltaCloud(OverridableTemplate, form.Form):
 
         data_stream = None
         
-        try:
+        try:            
             data_stream = urllib2.urlopen(url, timeout=20)
             xml = data_stream.read()
             data_stream.close()           
-        except urllib2.URLError, e:
-            raise IOError, e
+        except urllib2.URLError, e: 
+            if e.reason.message == 'The read operation timed out':
+                xml = "1Petició processada, en breu, rebreu informació a través d'un correu electrònic."                
+            else:                
+                raise IOError, e
         except Exception:
             error_message = "Failed contacting server."
             raise RuntimeError, error_message      
