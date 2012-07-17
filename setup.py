@@ -25,7 +25,7 @@ setup(name='upc.cloudPrivat',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-          
+          # -*- Extra requirements: -*-
           'plone.app.z3cform',
           'zope.i18nmessageid',
       ],
@@ -35,6 +35,4 @@ setup(name='upc.cloudPrivat',
       [z3c.autoinclude.plugin]
       target = plone
       """,
-      setup_requires=["PasteScript"],
-      paster_plugins=["ZopeSkel"],
       )
